@@ -24,6 +24,7 @@ body{
   position:relative;
   overflow:auto;
   overflow-x:hidden;
+  zoom:.8;
 }
 
 a{color:inherit; text-decoration:none}
