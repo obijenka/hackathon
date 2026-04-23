@@ -87,8 +87,8 @@
 .w__row.is-locked::after{
   content:"";
   position:absolute;
-  left:0;
-  right:0;
+  left:-10px;
+  right:-10px;
   top:50%;
   transform:translateY(-50%);
   height:10px;
@@ -121,6 +121,16 @@
   color:rgba(255,255,255,.82);
   font-weight:800;
 }
+
+.w__restart{
+  display:none;
+  height:44px;
+  width:auto;
+  padding:0 18px;
+  font-size:18px;
+}
+
+.w__restart.is-visible{display:inline-flex}
 
 .w__kbd{
   width:min(520px, 92vw);
@@ -202,6 +212,8 @@
     font-size:22px;
     z-index:13;
   }
+
+  .w__kbdToggle.is-hidden{display:none}
 }
 
 .krow{

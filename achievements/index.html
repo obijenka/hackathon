@@ -11,7 +11,10 @@
     <div class="app" id="app">
       <header class="topbar">
         <a class="btn btn--pill topbar__menu" href="../home/index.html">В меню</a>
-        <h1 class="title">Магазин</h1>
+        <div class="topbar__titleWrap">
+          <h1 class="title">Магазин</h1>
+          <button class="topbar__info" id="infoBtn" type="button" aria-label="Информация о MOBYCoins">i</button>
+        </div>
         <div class="topbar__spacer" aria-hidden="true"></div>
       </header>
 
@@ -47,6 +50,20 @@
           <span class="tab__text">Ещё</span>
         </button>
       </nav>
+
+      <div class="modalBackdrop" id="infoBackdrop" aria-hidden="true"></div>
+      <div class="modal" id="infoModal" role="dialog" aria-modal="true" aria-labelledby="infoTitle" aria-hidden="true">
+        <div class="modal__card">
+          <div class="modal__head">
+            <div class="modal__title" id="infoTitle">MOBYCoins</div>
+            <button class="modal__close" id="infoClose" type="button" aria-label="Закрыть">✕</button>
+          </div>
+          <div class="modal__body">
+            <div class="modal__text">MOBYCoins - это внутриигровая валюта. Играй в игры, оплачивай картой и лови коины!</div>
+            <div class="modal__text">Не хватает кэшбека? Обменяй коины на медали, но не забывай про достижения</div>
+          </div>
+        </div>
+      </div>
     </div>
 
     <script src="./script.js?v=2" defer></script>

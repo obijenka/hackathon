@@ -28,6 +28,7 @@
   let pointerActive = false;
   let pointerStartX = 0;
   let pointerX = 0;
+  let pointerStartPlayerX = 0;
 
   const world = {
     w: 390,
@@ -397,20 +398,26 @@
     let pointerTarget = 0;
     if (pointerActive) {
       const dx = pointerX - pointerStartX;
-      const norm = clamp(dx / (world.w * 0.14), -1, 1);
-      pointerTarget = norm;
+      const screenW = Math.max(1, window.innerWidth || world.w);
+      const dxWorld = (dx / screenW) * world.w;
+      player.x = pointerStartPlayerX + dxWorld;
+      player.vx = 0;
     }
 
     const input = clamp(target + pointerTarget, -1, 1);
 
-    player.vx += input * world.moveAccel * dt;
-    player.vx *= Math.pow(0.0008, dt);
-    player.vx = clamp(player.vx, -world.maxVx, world.maxVx);
+    if (!pointerActive) {
+      player.vx += input * world.moveAccel * dt;
+      player.vx *= Math.pow(0.0008, dt);
+      player.vx = clamp(player.vx, -world.maxVx, world.maxVx);
+    } else {
+      player.vx = 0;
+    }
 
     const prevY = player.y;
 
     player.vy += world.gravity * dt;
-    player.x += player.vx * dt;
+    if (!pointerActive) player.x += player.vx * dt;
     player.y += player.vy * dt;
 
     if (player.x < -player.width * 0.4) player.x = world.w + player.width * 0.4;
@@ -593,6 +600,7 @@
       pointerActive = true;
       pointerStartX = e.clientX;
       pointerX = e.clientX;
+      pointerStartPlayerX = player.x;
       canvas.setPointerCapture?.(e.pointerId);
     };
 
@@ -606,6 +614,7 @@
       if (!pointerActive) return;
       e?.preventDefault?.();
       pointerActive = false;
+      player.vx = 0;
     };
 
     const touchPointX = (e) => {
@@ -621,6 +630,7 @@
       pointerActive = true;
       pointerStartX = x;
       pointerX = x;
+      pointerStartPlayerX = player.x;
     };
 
     const onTouchMove = (e) => {
@@ -635,6 +645,7 @@
       if (!pointerActive) return;
       e?.preventDefault?.();
       pointerActive = false;
+      player.vx = 0;
     };
 
     canvas.addEventListener('pointerdown', onPointerDown, { passive: false });

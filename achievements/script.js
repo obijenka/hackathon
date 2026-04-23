@@ -5,8 +5,8 @@
     foodcourt: '../images/icons/burger.png',
     ramson: '../images/icons/rabbit.png',
     hammer: '../images/icons/hammer.png',
-    fly: '../images/icons/trampoline.png',
-    wise: '../images/icons/plug.png',
+    builder: '../images/icons/builder.png', //поменять
+    wise: '../images/icons/w.png',
     taxi: '../images/icons/taxi.png',
     musya: '../images/icons/musya.png',
   };
@@ -24,7 +24,7 @@
         id: 'foodcourt',
         active: false,
         title: 'Фудкортница 👑',
-        desc: 'Личный купон “Бургер Кинг”',
+        desc: 'Кэшбек 2% по MCC 5814',
         long: 'Зачем куда-то прыгать, если тут бесплатный Wi-Fi и свет для селфи? Заняла столик с одной колой на восьмерых и уйду только после закрытия. Вопросы? Набери 1000 очков, пока охранник не выгнал.',
         price: 250,
       },
@@ -32,7 +32,7 @@
         id: 'ramson',
         active: false,
         title: 'Черемша',
-        desc: 'Купон на скидку 10% в ЦУМ',
+        desc: 'Промокод в столовую',
         long: 'Накликай 1000 очков. Тихо, неспеша, с чувством выполненного долга.',
         price: 250,
       },
@@ -41,7 +41,7 @@
         active: false,
         title: 'Мама, вызывай такси!',
         desc: 'Скидка на Яндекс.Плюс',
-        long: 'Ты потрясный парень!',
+        long: 'Потрясный парень, оплати такси картой!',
         price: 250,
       },
     ],
@@ -55,11 +55,11 @@
         price: 100,
       },
       {
-        id: 'fly',
+        id: 'builder',
         active: false,
-        title: 'Куда летишь?',
-        desc: 'Глитч: -13% по MCC 7896',
-        long: 'Покупка открывает постоянную скидку.',
+        title: 'Строитель',
+        desc: 'Промокод в ЦУМ',
+        long: 'ПКаждый мужчина должен построить дом, вырастить сына и набрать 10000 в МТБласт.',
         price: 150,
       },
       {
@@ -67,7 +67,7 @@
         active: false,
         title: 'Муся',
         desc: 'Скидка в зоопарк',
-        long: 'Муся - это ты? А, нет, это МТБанк.',
+        long: 'Муся - это ты? А, нет, это МТБанк. Отгадай пять слов подряд в Вордли',
         price: 150,
       },
       {
@@ -75,7 +75,7 @@
         active: false,
         title: 'Мудрец',
         desc: 'Кэшбек 2% по MCC 5814',
-        long: 'Покупка открывает постоянный кэшбек.',
+        long: 'Гений, миллиардер, филантроп? Нет, я просто играл 3 дня подряд в Прыгуна!',
         price: 250,
       },
     ],
@@ -84,7 +84,21 @@
   const tempList = document.getElementById('tempList');
   const permList = document.getElementById('permList');
 
+  const infoBtnEl = document.getElementById('infoBtn');
+  const infoModalEl = document.getElementById('infoModal');
+  const infoBackdropEl = document.getElementById('infoBackdrop');
+  const infoCloseEl = document.getElementById('infoClose');
+
   let expandedId = null;
+
+  function setInfoOpen(open) {
+    if (!infoModalEl || !infoBackdropEl) return;
+    const next = Boolean(open);
+    infoModalEl.classList.toggle('is-open', next);
+    infoBackdropEl.classList.toggle('is-open', next);
+    infoModalEl.setAttribute('aria-hidden', next ? 'false' : 'true');
+    infoBackdropEl.setAttribute('aria-hidden', next ? 'false' : 'true');
+  }
 
   function allItems() {
     return [...data.temp, ...data.perm];
@@ -261,9 +275,7 @@
     pill.className = `achCard__pill${item.active ? ' achCard__pill--active' : ''}`;
     pill.textContent = item.active ? 'Активный' : `Купить за ${item.price}`;
 
-    if (!item.active || expandedId !== item.id) {
-      pill.style.display = 'none';
-    }
+    pill.style.display = 'none';
 
     card.appendChild(icon);
     card.appendChild(text);
@@ -291,6 +303,16 @@
     coin.alt = '';
     coin.src = COIN_ICON;
     balance.appendChild(coin);
+
+    if (item.active && expandedId === item.id) {
+      const activeBtn = document.createElement('button');
+      activeBtn.className = 'btn achCard__buy achCard__buy--active';
+      activeBtn.type = 'button';
+      activeBtn.textContent = 'Активный';
+      activeBtn.disabled = true;
+      actions.appendChild(activeBtn);
+      details.appendChild(actions);
+    }
 
     if (!item.active && item.price > 0) {
       const buyBtn = document.createElement('button');
@@ -334,4 +356,11 @@
 
   load();
   render();
+
+  if (infoBtnEl) infoBtnEl.addEventListener('click', () => setInfoOpen(true));
+  if (infoCloseEl) infoCloseEl.addEventListener('click', () => setInfoOpen(false));
+  if (infoBackdropEl) infoBackdropEl.addEventListener('click', () => setInfoOpen(false));
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') setInfoOpen(false);
+  });
 })();

@@ -7,6 +7,7 @@
   const kbdToggleEl = document.getElementById('kbdToggle');
   const kbdBackdropEl = document.getElementById('kbdBackdrop');
   const maxBadgeEl = document.getElementById('maxBadge');
+  const restartBtnEl = document.getElementById('restartBtn');
 
   const MT_KEY = 'mt_state_v1';
   const GAME_KEY = 'wordle';
@@ -51,6 +52,11 @@
     statusEl.textContent = text;
   }
 
+  function setRestartVisible(v) {
+    if (!restartBtnEl) return;
+    restartBtnEl.classList.toggle('is-visible', Boolean(v));
+  }
+
   function isMobile() {
     return window.matchMedia && window.matchMedia('(max-width: 576px)').matches;
   }
@@ -61,6 +67,7 @@
     kbdEl.classList.toggle('is-open', next);
     if (kbdBackdropEl) kbdBackdropEl.classList.toggle('is-open', next);
     if (kbdToggleEl) kbdToggleEl.setAttribute('aria-expanded', next ? 'true' : 'false');
+    if (kbdToggleEl) kbdToggleEl.classList.toggle('is-hidden', next);
 
     const root = document.querySelector('.w');
     if (root) root.classList.toggle('is-kbd-open', next);
@@ -247,10 +254,28 @@
     const guess = state.grid[state.row].join('');
 
     const targetArr = target.split('');
-    const res = Array.from({ length: COLS }, () => 'yellow');
+    const res = Array.from({ length: COLS }, () => 'gray');
+
+    const remaining = new Map();
+    for (let i = 0; i < COLS; i++) {
+      const t = targetArr[i];
+      if (guess[i] === t) {
+        res[i] = 'green';
+      } else {
+        remaining.set(t, (remaining.get(t) || 0) + 1);
+      }
+    }
 
     for (let i = 0; i < COLS; i++) {
-      if (guess[i] === targetArr[i]) res[i] = 'green';
+      if (res[i] === 'green') continue;
+      const ch = guess[i];
+      const left = remaining.get(ch) || 0;
+      if (left > 0) {
+        res[i] = 'yellow';
+        remaining.set(ch, left - 1);
+      } else {
+        res[i] = 'gray';
+      }
     }
 
     for (let i = 0; i < COLS; i++) {
@@ -292,12 +317,14 @@
     if (guess === target) {
       state.done = true;
       setStatus('Угадал!');
+      setRestartVisible(false);
       return;
     }
 
     if (state.row === ROWS - 1) {
       state.done = true;
       setStatus(`Не угадал. Слово: ${target}`);
+      setRestartVisible(true);
       return;
     }
 
@@ -319,7 +346,7 @@
 
   function onKey(k) {
     if (state.done) return;
-    if (k === 'ENTER') return;
+    if (k === 'ENTER') return submit();
     if (k === 'BACK') return deleteChar();
 
     const ch = normalizeKey(k);
@@ -331,7 +358,7 @@
     const rows = [
       ['Й','Ц','У','К','Е','Н','Г','Ш','Щ','З','Х','Ъ'],
       ['Ф','Ы','В','А','П','Р','О','Л','Д','Ж','Э'],
-      ['Я','Ч','С','М','И','Т','Ь','Б','Ю'],
+      ['Я','Ч','С','М','И','Т','Ь','Б','Ю','BACK'],
     ];
 
     kbdEl.innerHTML = '';
@@ -386,6 +413,28 @@
     if (kbdBackdropEl) {
       kbdBackdropEl.addEventListener('click', () => setKbdOpen(false));
     }
+
+    setRestartVisible(false);
+    if (restartBtnEl) {
+      restartBtnEl.addEventListener('click', () => {
+        if (isMobile()) setKbdOpen(false);
+        window.location.reload();
+      });
+    }
+
+    document.addEventListener(
+      'pointerdown',
+      (e) => {
+        if (!isMobile()) return;
+        if (!kbdEl?.classList.contains('is-open')) return;
+        const t = e.target;
+        if (kbdEl?.contains(t)) return;
+        if (kbdToggleEl?.contains(t)) return;
+        setKbdOpen(false);
+      },
+      { capture: true },
+    );
+
     if (gridEl) {
       gridEl.addEventListener('click', () => {
         if (!isMobile()) return;

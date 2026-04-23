@@ -351,7 +351,9 @@
           const h = y1 - y0 + 1;
 
           // We only consider rectangles at least 2x2, except 2x2 (too easy).
-          if (h >= 2 && minW >= 2 && !(h === 2 && minW === 2)) {
+          // Also ignore small 3x3-ish zones: they make the 3x3 piece auto-clear immediately.
+          // Keep combo clears for bigger rectangles only.
+          if (h >= 2 && minW >= 2 && (h >= 4 || minW >= 4) && !(h === 2 && minW === 2)) {
             rectangles += 1;
             for (let yy = y0; yy <= y1; yy++) {
               for (let xx = x0; xx < x0 + minW; xx++) {
@@ -620,7 +622,8 @@
       const topLeftX = contentLeft + ox * cellW;
       const topLeftY = contentTop + oy * cellH;
 
-      ghost.style.transform = `scale(${s}) translate3d(${topLeftX / s}px, ${topLeftY / s}px, 0)`;
+      ghost.style.transformOrigin = '0 0';
+      ghost.style.transform = `translate3d(${topLeftX}px, ${topLeftY}px, 0) scale(${s})`;
     };
 
     const onUp = (e) => {
