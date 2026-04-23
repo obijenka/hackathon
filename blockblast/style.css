@@ -1,4 +1,4 @@
-.stage{padding:0; overflow:hidden; overscroll-behavior: none}
+.stage{padding:0; overflow:auto; overscroll-behavior: none}
 
 :root{
   --bb-block: 32px;
@@ -12,7 +12,7 @@
   align-items:center;
   justify-content:flex-start;
   gap:14px;
-  touch-action: none;
+  touch-action: pan-y;
 }
 
 .bb__score{

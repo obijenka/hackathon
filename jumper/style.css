@@ -7,6 +7,7 @@ body.has-canvas .game{
   display:block;
   background:transparent;
   z-index:1;
+  touch-action:none;
 }
 
 .hint{

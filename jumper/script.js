@@ -583,29 +583,28 @@
     });
 
     const onPointerDown = (e) => {
+      e.preventDefault();
       pointerActive = true;
-      const x = 'touches' in e ? e.touches[0].clientX : e.clientX;
-      pointerStartX = x;
-      pointerX = x;
+      pointerStartX = e.clientX;
+      pointerX = e.clientX;
+      canvas.setPointerCapture?.(e.pointerId);
     };
 
     const onPointerMove = (e) => {
       if (!pointerActive) return;
-      const x = 'touches' in e ? e.touches[0].clientX : e.clientX;
-      pointerX = x;
+      e.preventDefault();
+      pointerX = e.clientX;
     };
 
-    const onPointerUp = () => {
+    const onPointerUp = (e) => {
+      e?.preventDefault?.();
       pointerActive = false;
     };
 
-    canvas.addEventListener('mousedown', onPointerDown);
-    window.addEventListener('mousemove', onPointerMove);
-    window.addEventListener('mouseup', onPointerUp);
-
-    canvas.addEventListener('touchstart', onPointerDown, { passive: true });
-    window.addEventListener('touchmove', onPointerMove, { passive: true });
-    window.addEventListener('touchend', onPointerUp, { passive: true });
+    canvas.addEventListener('pointerdown', onPointerDown, { passive: false });
+    canvas.addEventListener('pointermove', onPointerMove, { passive: false });
+    canvas.addEventListener('pointerup', onPointerUp, { passive: false });
+    canvas.addEventListener('pointercancel', onPointerUp, { passive: false });
 
     document.getElementById('menuBtn').addEventListener('click', () => {
       // заглушка под твое меню
