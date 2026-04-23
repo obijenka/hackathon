@@ -459,12 +459,18 @@
     const inside = x >= rect.left && x <= rect.right && y >= rect.top && y <= rect.bottom;
     if (!inside) return null;
 
-    const pad = 10;
-    const gx = clamp(x - rect.left - pad, 0, rect.width - pad * 2 - 1);
-    const gy = clamp(y - rect.top - pad, 0, rect.height - pad * 2 - 1);
+    const scaleX = rect.width / (boardEl.offsetWidth || rect.width || 1);
+    const scaleY = rect.height / (boardEl.offsetHeight || rect.height || 1);
 
-    const cellW = (rect.width - pad * 2) / N;
-    const cellH = (rect.height - pad * 2) / N;
+    const pad = 10;
+    const lx = (x - rect.left) / (scaleX || 1);
+    const ly = (y - rect.top) / (scaleY || 1);
+
+    const gx = clamp(lx - pad, 0, boardEl.offsetWidth - pad * 2 - 1);
+    const gy = clamp(ly - pad, 0, boardEl.offsetHeight - pad * 2 - 1);
+
+    const cellW = (boardEl.offsetWidth - pad * 2) / N;
+    const cellH = (boardEl.offsetHeight - pad * 2) / N;
 
     const cx = clamp(Math.floor(gx / cellW), 0, N - 1);
     const cy = clamp(Math.floor(gy / cellH), 0, N - 1);
@@ -476,6 +482,7 @@
     let ghost = null;
     let grabCell = { x: 0, y: 0 };
     let grabOffset = { x: 0, y: 0 };
+    let pieceScale = 1;
 
     const getBlockSizePx = () => {
       const raw = getComputedStyle(document.documentElement).getPropertyValue('--bb-block').trim();
@@ -517,10 +524,11 @@
       pointer.id = e.pointerId;
 
       const rect = pieceEl.getBoundingClientRect();
+      pieceScale = rect.width / (pieceEl.offsetWidth || rect.width || 1);
       const block = getBlockSizePx();
 
-      const localX = clamp(e.clientX - rect.left, 0, rect.width - 1);
-      const localY = clamp(e.clientY - rect.top, 0, rect.height - 1);
+      const localX = clamp((e.clientX - rect.left) / (pieceScale || 1), 0, pieceEl.offsetWidth - 1);
+      const localY = clamp((e.clientY - rect.top) / (pieceScale || 1), 0, pieceEl.offsetHeight - 1);
 
       const b = shapeBounds(item.shape);
       grabCell = {
@@ -559,8 +567,9 @@
       e.preventDefault();
       if (!pointer.active || !ghost) return;
 
-      const x = e.clientX - grabOffset.x - grabCell.x * getBlockSizePx();
-      const y = e.clientY - grabOffset.y - grabCell.y * getBlockSizePx();
+      const scale = pieceScale || 1;
+      const x = e.clientX - grabOffset.x * scale - grabCell.x * getBlockSizePx() * scale;
+      const y = e.clientY - grabOffset.y * scale - grabCell.y * getBlockSizePx() * scale;
       ghost.style.transform = `translate3d(${x}px, ${y}px, 0)`;
 
       const cell = getBoardCellFromPoint(e.clientX, e.clientY);
