@@ -582,7 +582,13 @@
       if (e.key === 'ArrowRight' || e.key === 'd' || e.key === 'D') keys.right = false;
     });
 
+    const isUiTarget = (target) => {
+      if (!target || typeof target.closest !== 'function') return false;
+      return Boolean(target.closest('a, button, .btn, .tab'));
+    };
+
     const onPointerDown = (e) => {
+      if (isUiTarget(e.target)) return;
       e.preventDefault();
       pointerActive = true;
       pointerStartX = e.clientX;
@@ -605,6 +611,11 @@
     canvas.addEventListener('pointermove', onPointerMove, { passive: false });
     canvas.addEventListener('pointerup', onPointerUp, { passive: false });
     canvas.addEventListener('pointercancel', onPointerUp, { passive: false });
+
+    document.addEventListener('pointerdown', onPointerDown, { passive: false, capture: true });
+    document.addEventListener('pointermove', onPointerMove, { passive: false, capture: true });
+    document.addEventListener('pointerup', onPointerUp, { passive: false, capture: true });
+    document.addEventListener('pointercancel', onPointerUp, { passive: false, capture: true });
 
     document.getElementById('menuBtn').addEventListener('click', () => {
       // заглушка под твое меню
