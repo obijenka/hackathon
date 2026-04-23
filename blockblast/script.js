@@ -572,55 +572,59 @@
     };
 
     const onMove = (e) => {
-      e.preventDefault();
-      if (!pointer.active || !ghost) return;
-
-      const cell = getBoardCellFromPoint(e.clientX, e.clientY);
-      if (!cell) {
+    e.preventDefault();
+    if (!pointer.active || !ghost) return;
+    
+    const scaleCompensate = 1 / 0.8;
+    const compensatedX = e.clientX * scaleCompensate;
+    const compensatedY = e.clientY * scaleCompensate;
+    
+    const cell = getBoardCellFromPoint(compensatedX, compensatedY);
+    if (!cell) {
         snap.active = false;
         clearPreview();
-
         ghost.style.filter = 'drop-shadow(0 18px 22px rgba(0,0,0,.45))';
         const nudge = getNudgePx();
+        // БЕЗ КОМПЕНСАЦИИ - берем реальные экранные координаты
         const x = e.clientX - pieceSize.w / 2;
         const y = e.clientY - pieceSize.h / 2;
         ghost.style.transform = `translate3d(${x + nudge.x}px, ${y + nudge.y}px, 0)`;
         return;
-      }
+    }
 
-      ghost.style.filter = 'none';
+    ghost.style.filter = 'none';
 
-      const ox = cell.x - anchorCell.x;
-      const oy = cell.y - anchorCell.y;
+    const ox = cell.x - anchorCell.x;
+    const oy = cell.y - anchorCell.y;
 
-      const ok = canPlace(item.shape, ox, oy);
-      setPreview(item.shape, ox, oy, ok);
-      snap = { ok, ox, oy, active: true };
+    const ok = canPlace(item.shape, ox, oy);
+    setPreview(item.shape, ox, oy, ok);
+    snap = { ok, ox, oy, active: true };
 
-      const rect = boardEl.getBoundingClientRect();
-      const scaleX = rect.width / (boardEl.offsetWidth || rect.width || 1);
-      const scaleY = rect.height / (boardEl.offsetHeight || rect.height || 1);
+    const rect = boardEl.getBoundingClientRect();
+    const scaleX = rect.width / (boardEl.offsetWidth || rect.width || 1);
+    const scaleY = rect.height / (boardEl.offsetHeight || rect.height || 1);
 
-      const cs = getComputedStyle(boardEl);
-      const padL = Number.parseFloat(cs.paddingLeft) || 0;
-      const padT = Number.parseFloat(cs.paddingTop) || 0;
-      const bL = Number.parseFloat(cs.borderLeftWidth) || 0;
-      const bT = Number.parseFloat(cs.borderTopWidth) || 0;
+    const cs = getComputedStyle(boardEl);
+    const padL = Number.parseFloat(cs.paddingLeft) || 0;
+    const padT = Number.parseFloat(cs.paddingTop) || 0;
+    const bL = Number.parseFloat(cs.borderLeftWidth) || 0;
+    const bT = Number.parseFloat(cs.borderTopWidth) || 0;
 
-      const contentLeft = rect.left + (bL + padL) * (scaleX || 1);
-      const contentTop = rect.top + (bT + padT) * (scaleY || 1);
+    const contentLeft = rect.left + (bL + padL) * (scaleX || 1);
+    const contentTop = rect.top + (bT + padT) * (scaleY || 1);
 
-      const cellW = ((boardEl.clientWidth - padL - (Number.parseFloat(cs.paddingRight) || 0)) / N) * (scaleX || 1);
-      const cellH = ((boardEl.clientHeight - padT - (Number.parseFloat(cs.paddingBottom) || 0)) / N) * (scaleY || 1);
+    const cellW = ((boardEl.clientWidth - padL - (Number.parseFloat(cs.paddingRight) || 0)) / N) * (scaleX || 1);
+    const cellH = ((boardEl.clientHeight - padT - (Number.parseFloat(cs.paddingBottom) || 0)) / N) * (scaleY || 1);
 
-      const s = Math.max(0.1, cellW / getBlockSizePx());
-      const topLeftX = contentLeft + ox * cellW;
-      const topLeftY = contentTop + oy * cellH;
+    const s = Math.max(0.1, cellW / getBlockSizePx());
+    const topLeftX = contentLeft + ox * cellW;
+    const topLeftY = contentTop + oy * cellH;
 
-      const nudge = getNudgePx();
+    const nudge = getNudgePx();
 
-      ghost.style.transform = `translate3d(${topLeftX + nudge.x}px, ${topLeftY + nudge.y}px, 0) scale(${s})`;
-    };
+    ghost.style.transform = `translate3d(${topLeftX + nudge.x}px, ${topLeftY + nudge.y}px, 0) scale(${s})`;
+};
 
     const onUp = (e) => {
       e.preventDefault();

@@ -1,6 +1,8 @@
 .stage{padding:0; overflow:auto; overscroll-behavior: none}
 
-body.has-bb{zoom:1}
+body.has-bb{
+
+}
 
 :root{
   --bb-block: 32px;
