@@ -495,6 +495,7 @@
     let grabCell = { x: 0, y: 0 };
     let grabOffset = { x: 0, y: 0 };
     let pieceScale = 1;
+    let snap = { ok: false, ox: 0, oy: 0, active: false };
 
     const getBlockSizePx = () => {
       const raw = getComputedStyle(document.documentElement).getPropertyValue('--bb-block').trim();
@@ -515,6 +516,7 @@
       clearPreview();
       pointer.active = false;
       pointer.id = null;
+      snap = { ok: false, ox: 0, oy: 0, active: false };
     };
 
     const onWinMove = (e) => {
@@ -579,14 +581,15 @@
       e.preventDefault();
       if (!pointer.active || !ghost) return;
 
-      const scale = pieceScale || 1;
-      const x = e.clientX - grabOffset.x * scale - grabCell.x * getBlockSizePx() * scale;
-      const y = e.clientY - grabOffset.y * scale - grabCell.y * getBlockSizePx() * scale;
-      ghost.style.transform = `translate3d(${x}px, ${y}px, 0)`;
-
       const cell = getBoardCellFromPoint(e.clientX, e.clientY);
       if (!cell) {
+        snap.active = false;
         clearPreview();
+
+        const scale = pieceScale || 1;
+        const x = e.clientX - grabOffset.x * scale - grabCell.x * getBlockSizePx() * scale;
+        const y = e.clientY - grabOffset.y * scale - grabCell.y * getBlockSizePx() * scale;
+        ghost.style.transform = `translate3d(${x}px, ${y}px, 0)`;
         return;
       }
 
@@ -595,22 +598,40 @@
 
       const ok = canPlace(item.shape, ox, oy);
       setPreview(item.shape, ox, oy, ok);
+      snap = { ok, ox, oy, active: true };
+
+      const rect = boardEl.getBoundingClientRect();
+      const scaleX = rect.width / (boardEl.offsetWidth || rect.width || 1);
+      const scaleY = rect.height / (boardEl.offsetHeight || rect.height || 1);
+
+      const cs = getComputedStyle(boardEl);
+      const padL = Number.parseFloat(cs.paddingLeft) || 0;
+      const padT = Number.parseFloat(cs.paddingTop) || 0;
+      const bL = Number.parseFloat(cs.borderLeftWidth) || 0;
+      const bT = Number.parseFloat(cs.borderTopWidth) || 0;
+
+      const contentLeft = rect.left + (bL + padL) * (scaleX || 1);
+      const contentTop = rect.top + (bT + padT) * (scaleY || 1);
+
+      const cellW = ((boardEl.clientWidth - padL - (Number.parseFloat(cs.paddingRight) || 0)) / N) * (scaleX || 1);
+      const cellH = ((boardEl.clientHeight - padT - (Number.parseFloat(cs.paddingBottom) || 0)) / N) * (scaleY || 1);
+
+      const s = Math.max(0.1, cellW / getBlockSizePx());
+      const topLeftX = contentLeft + ox * cellW;
+      const topLeftY = contentTop + oy * cellH;
+
+      ghost.style.transform = `scale(${s}) translate3d(${topLeftX / s}px, ${topLeftY / s}px, 0)`;
     };
 
     const onUp = (e) => {
       e.preventDefault();
       if (!pointer.active) return;
-
-      const cell = getBoardCellFromPoint(e.clientX, e.clientY);
       let placed = false;
-      if (cell) {
-        const ox = cell.x - grabCell.x;
-        const oy = cell.y - grabCell.y;
-        if (canPlace(item.shape, ox, oy)) {
-          place(item.shape, ox, oy);
-          item.used = true;
-          placed = true;
-        }
+
+      if (snap.active && snap.ok) {
+        place(item.shape, snap.ox, snap.oy);
+        item.used = true;
+        placed = true;
       }
 
       cleanup();
