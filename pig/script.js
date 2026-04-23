@@ -10,6 +10,7 @@
   const MT_KEY = 'mt_state_v1';
   const GAME_KEY = 'pig';
   const ACH_X2_ID = 'hammer';
+  const ACH_AUTO_ID = 'builder';
 
   const STORAGE_KEY = 'pig_clicker_v2';
 
@@ -41,6 +42,34 @@
   function hasX2Achievement() {
     const s = loadMtState();
     return Boolean(s?.shop?.active && s.shop.active[ACH_X2_ID]);
+  }
+
+  function hasAutoAchievement() {
+    const s = loadMtState();
+    return Boolean(s?.shop?.active && s.shop.active[ACH_AUTO_ID]);
+  }
+
+  let toastTimer = null;
+  const toastEl = (() => {
+    const el = document.createElement('div');
+    el.className = 'pig__toast';
+    el.setAttribute('aria-live', 'polite');
+    el.setAttribute('aria-atomic', 'true');
+    el.style.display = 'none';
+    document.body.appendChild(el);
+    return el;
+  })();
+
+  function showToast(text) {
+    if (!toastEl) return;
+    toastEl.textContent = text;
+    toastEl.style.display = 'block';
+    toastEl.classList.add('is-show');
+    if (toastTimer) clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => {
+      toastEl.classList.remove('is-show');
+      toastEl.style.display = 'none';
+    }, 1400);
   }
 
   function save() {
@@ -127,7 +156,15 @@
       save();
     }
 
-    btnX2.disabled = !canUseX2;
+    const canUseAuto = hasAutoAchievement();
+    if (!canUseAuto && state.auto) {
+      setAuto(false);
+    }
+
+    btnX2.classList.toggle('is-locked', !canUseX2);
+    btnAuto.classList.toggle('is-locked', !canUseAuto);
+    btnX2.setAttribute('aria-disabled', canUseX2 ? 'false' : 'true');
+    btnAuto.setAttribute('aria-disabled', canUseAuto ? 'false' : 'true');
 
     btnX2.classList.toggle('is-on', state.x2);
     btnAuto.classList.toggle('is-on', state.auto);
@@ -252,13 +289,20 @@
   }
 
   function toggleX2() {
-    if (!hasX2Achievement()) return;
+    if (!hasX2Achievement()) {
+      showToast('Нужно приобрести медаль Молоток');
+      return;
+    }
     state.x2 = !state.x2;
     save();
     render();
   }
 
   function toggleAuto() {
+    if (!hasAutoAchievement()) {
+      showToast('Нужно приобрести медаль Строитель');
+      return;
+    }
     setAuto(!state.auto);
   }
 

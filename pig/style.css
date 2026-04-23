@@ -116,6 +116,11 @@
   border-color:rgba(255,255,255,.25);
 }
 
+.pig__actionBtn.is-locked{
+  opacity:.55;
+  filter: grayscale(.2);
+}
+
 #btnAuto{
   background:rgba(255,255,255,.08);
   border-color:rgba(255,255,255,.14);
@@ -138,6 +143,28 @@
   inset:0;
   pointer-events:none;
   z-index:3;
+}
+
+.pig__toast{
+  position:fixed;
+  left:50%;
+  bottom:92px;
+  transform:translate(-50%, 12px);
+  padding:12px 14px;
+  border-radius:14px;
+  border:1px solid rgba(255,255,255,.18);
+  background: rgba(20, 20, 20, 0.92);
+  color:rgba(255,255,255,.92);
+  font-weight:800;
+  font-size:14px;
+  text-align:center;
+  max-width:min(520px, 92vw);
+  z-index:10;
+}
+
+.pig__toast.is-show{
+  transform:translate(-50%, 0);
+  transition: transform 140ms ease;
 }
 
 .particle{
