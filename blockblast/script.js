@@ -57,6 +57,7 @@
 
   let cells = [];
   let preview = [];
+  let previewClass = 'is-preview';
 
   function clamp(v, a, b) {
     return Math.max(a, Math.min(b, v));
@@ -234,12 +235,14 @@
     for (const [x, y] of preview) {
       const el = cells[idx(x, y)];
       el.classList.remove('is-preview');
+      el.classList.remove('is-preview-bad');
     }
     preview = [];
   }
 
-  function setPreview(shape, ox, oy) {
+  function setPreview(shape, ox, oy, isValid) {
     clearPreview();
+    previewClass = isValid ? 'is-preview' : 'is-preview-bad';
     for (const [sx, sy] of shape) {
       const x = ox + sx;
       const y = oy + sy;
@@ -248,7 +251,7 @@
     }
     for (const [x, y] of preview) {
       const el = cells[idx(x, y)];
-      el.classList.add('is-preview');
+      el.classList.add(previewClass);
     }
   }
 
@@ -569,12 +572,8 @@
       const ox = cell.x - grabCell.x;
       const oy = cell.y - grabCell.y;
 
-      if (!canPlace(item.shape, ox, oy)) {
-        clearPreview();
-        return;
-      }
-
-      setPreview(item.shape, ox, oy);
+      const ok = canPlace(item.shape, ox, oy);
+      setPreview(item.shape, ox, oy, ok);
     };
 
     const onUp = (e) => {
