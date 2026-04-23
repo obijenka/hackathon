@@ -461,30 +461,14 @@
     const inside = x >= rect.left && x <= rect.right && y >= rect.top && y <= rect.bottom;
     if (!inside) return null;
 
-    const scaleX = rect.width / (boardEl.offsetWidth || rect.width || 1);
-    const scaleY = rect.height / (boardEl.offsetHeight || rect.height || 1);
+    const lx = x - rect.left;
+    const ly = y - rect.top;
 
-    const cs = getComputedStyle(boardEl);
-    const padL = Number.parseFloat(cs.paddingLeft) || 0;
-    const padR = Number.parseFloat(cs.paddingRight) || 0;
-    const padT = Number.parseFloat(cs.paddingTop) || 0;
-    const padB = Number.parseFloat(cs.paddingBottom) || 0;
-    const bL = Number.parseFloat(cs.borderLeftWidth) || 0;
-    const bR = Number.parseFloat(cs.borderRightWidth) || 0;
-    const bT = Number.parseFloat(cs.borderTopWidth) || 0;
-    const bB = Number.parseFloat(cs.borderBottomWidth) || 0;
+    const cellW = rect.width / N;
+    const cellH = rect.height / N;
 
-    const lx = (x - rect.left) / (scaleX || 1);
-    const ly = (y - rect.top) / (scaleY || 1);
-
-    const contentW = Math.max(1, boardEl.clientWidth - padL - padR);
-    const contentH = Math.max(1, boardEl.clientHeight - padT - padB);
-
-    const gx = clamp(lx - bL - padL, 0, contentW - 1);
-    const gy = clamp(ly - bT - padT, 0, contentH - 1);
-
-    const cellW = contentW / N;
-    const cellH = contentH / N;
+    const gx = clamp(lx, 0, rect.width - 1);
+    const gy = clamp(ly, 0, rect.height - 1);
 
     const cx = clamp(Math.floor(gx / cellW), 0, N - 1);
     const cy = clamp(Math.floor(gy / cellH), 0, N - 1);
@@ -494,10 +478,15 @@
   function bindPieceDrag(pieceEl, item) {
     const pointer = { active: false, id: null };
     let ghost = null;
-    let grabCell = { x: 0, y: 0 };
-    let grabOffset = { x: 0, y: 0 };
-    let pieceScale = 1;
+    let anchorCell = { x: 0, y: 0 };
+    let pieceSize = { w: 0, h: 0 };
     let snap = { ok: false, ox: 0, oy: 0, active: false };
+
+    const getNudgePx = () => {
+      // Small visual nudge to fine-tune where the grabbed piece sits under the pointer.
+      const b = getBlockSizePx();
+      return { x: Math.round(b * -0.2), y: Math.round(b * -0.25) };
+    };
 
     const getBlockSizePx = () => {
       const raw = getComputedStyle(document.documentElement).getPropertyValue('--bb-block').trim();
@@ -539,22 +528,15 @@
       pointer.active = true;
       pointer.id = e.pointerId;
 
-      const rect = pieceEl.getBoundingClientRect();
-      pieceScale = rect.width / (pieceEl.offsetWidth || rect.width || 1);
-      const block = getBlockSizePx();
+      pieceEl.setPointerCapture?.(e.pointerId);
 
-      const localX = clamp((e.clientX - rect.left) / (pieceScale || 1), 0, pieceEl.offsetWidth - 1);
-      const localY = clamp((e.clientY - rect.top) / (pieceScale || 1), 0, pieceEl.offsetHeight - 1);
+      const rect = pieceEl.getBoundingClientRect();
+      pieceSize = { w: rect.width, h: rect.height };
 
       const b = shapeBounds(item.shape);
-      grabCell = {
-        x: clamp(Math.floor(localX / block), 0, b.w - 1),
-        y: clamp(Math.floor(localY / block), 0, b.h - 1),
-      };
-
-      grabOffset = {
-        x: localX - grabCell.x * block,
-        y: localY - grabCell.y * block,
+      anchorCell = {
+        x: clamp(Math.floor((b.w - 1) / 2), 0, b.w - 1),
+        y: clamp(Math.floor((b.h - 1) / 2), 0, b.h - 1),
       };
 
       ghost = pieceEl.cloneNode(true);
@@ -566,6 +548,7 @@
       ghost.style.zIndex = '11';
       ghost.style.pointerEvents = 'none';
       ghost.style.willChange = 'transform';
+      ghost.style.transformOrigin = '0 0';
 
       pieceEl.style.opacity = '0.15';
       pieceEl.classList.add('is-grabbed');
@@ -576,7 +559,16 @@
       window.addEventListener('pointerup', onWinUp, { passive: false });
       window.addEventListener('pointercancel', onWinUp, { passive: false });
 
-      onMove(e);
+      // Defer first position until layout is ready; otherwise the ghost can jump.
+      const firstEvent = e;
+      requestAnimationFrame(() => {
+        if (!pointer.active || !ghost) return;
+        const gRect = ghost.getBoundingClientRect();
+        if (gRect.width > 0 && gRect.height > 0) {
+          pieceSize = { w: gRect.width, h: gRect.height };
+        }
+        onMove(firstEvent);
+      });
     };
 
     const onMove = (e) => {
@@ -588,15 +580,18 @@
         snap.active = false;
         clearPreview();
 
-        const scale = pieceScale || 1;
-        const x = e.clientX - grabOffset.x * scale - grabCell.x * getBlockSizePx() * scale;
-        const y = e.clientY - grabOffset.y * scale - grabCell.y * getBlockSizePx() * scale;
-        ghost.style.transform = `translate3d(${x}px, ${y}px, 0)`;
+        ghost.style.filter = 'drop-shadow(0 18px 22px rgba(0,0,0,.45))';
+        const nudge = getNudgePx();
+        const x = e.clientX - pieceSize.w / 2;
+        const y = e.clientY - pieceSize.h / 2;
+        ghost.style.transform = `translate3d(${x + nudge.x}px, ${y + nudge.y}px, 0)`;
         return;
       }
 
-      const ox = cell.x - grabCell.x;
-      const oy = cell.y - grabCell.y;
+      ghost.style.filter = 'none';
+
+      const ox = cell.x - anchorCell.x;
+      const oy = cell.y - anchorCell.y;
 
       const ok = canPlace(item.shape, ox, oy);
       setPreview(item.shape, ox, oy, ok);
@@ -622,8 +617,9 @@
       const topLeftX = contentLeft + ox * cellW;
       const topLeftY = contentTop + oy * cellH;
 
-      ghost.style.transformOrigin = '0 0';
-      ghost.style.transform = `translate3d(${topLeftX}px, ${topLeftY}px, 0) scale(${s})`;
+      const nudge = getNudgePx();
+
+      ghost.style.transform = `translate3d(${topLeftX + nudge.x}px, ${topLeftY + nudge.y}px, 0) scale(${s})`;
     };
 
     const onUp = (e) => {
