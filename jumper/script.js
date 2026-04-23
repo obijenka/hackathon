@@ -607,15 +607,53 @@
       pointerActive = false;
     };
 
+    const touchPointX = (e) => {
+      const t = e?.touches?.[0] || e?.changedTouches?.[0];
+      return typeof t?.clientX === 'number' ? t.clientX : null;
+    };
+
+    const onTouchStart = (e) => {
+      if (isUiTarget(e.target)) return;
+      const x = touchPointX(e);
+      if (x === null) return;
+      e.preventDefault();
+      pointerActive = true;
+      pointerStartX = x;
+      pointerX = x;
+    };
+
+    const onTouchMove = (e) => {
+      if (!pointerActive) return;
+      const x = touchPointX(e);
+      if (x === null) return;
+      e.preventDefault();
+      pointerX = x;
+    };
+
+    const onTouchEnd = (e) => {
+      e?.preventDefault?.();
+      pointerActive = false;
+    };
+
     canvas.addEventListener('pointerdown', onPointerDown, { passive: false });
     canvas.addEventListener('pointermove', onPointerMove, { passive: false });
     canvas.addEventListener('pointerup', onPointerUp, { passive: false });
     canvas.addEventListener('pointercancel', onPointerUp, { passive: false });
 
+    canvas.addEventListener('touchstart', onTouchStart, { passive: false });
+    canvas.addEventListener('touchmove', onTouchMove, { passive: false });
+    canvas.addEventListener('touchend', onTouchEnd, { passive: false });
+    canvas.addEventListener('touchcancel', onTouchEnd, { passive: false });
+
     document.addEventListener('pointerdown', onPointerDown, { passive: false, capture: true });
     document.addEventListener('pointermove', onPointerMove, { passive: false, capture: true });
     document.addEventListener('pointerup', onPointerUp, { passive: false, capture: true });
     document.addEventListener('pointercancel', onPointerUp, { passive: false, capture: true });
+
+    document.addEventListener('touchstart', onTouchStart, { passive: false, capture: true });
+    document.addEventListener('touchmove', onTouchMove, { passive: false, capture: true });
+    document.addEventListener('touchend', onTouchEnd, { passive: false, capture: true });
+    document.addEventListener('touchcancel', onTouchEnd, { passive: false, capture: true });
 
     document.getElementById('menuBtn').addEventListener('click', () => {
       // заглушка под твое меню

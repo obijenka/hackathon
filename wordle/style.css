@@ -134,6 +134,17 @@
 .w__kbdBackdrop{display:none}
 
 @media (max-width: 576px){
+  .w{padding:0 12px; gap:10px}
+
+  .w__score{font-size:44px}
+
+  .w__grid{
+    width:min(420px, 96vw);
+    row-gap: 22px;
+  }
+
+  .w__cell{font-size:clamp(32px, 9vw, 52px)}
+
   .w__kbd{
     position:fixed;
     left:0;
@@ -210,6 +221,10 @@
   user-select:none;
   -webkit-tap-highlight-color: transparent;
   font-size: 40px;
+}
+
+@media (max-width: 576px){
+  .key{font-size:clamp(18px, 5.2vw, 30px)}
 }
 
 .key.is-green{color:#48D026}
