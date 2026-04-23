@@ -462,15 +462,27 @@
     const scaleX = rect.width / (boardEl.offsetWidth || rect.width || 1);
     const scaleY = rect.height / (boardEl.offsetHeight || rect.height || 1);
 
-    const pad = 10;
+    const cs = getComputedStyle(boardEl);
+    const padL = Number.parseFloat(cs.paddingLeft) || 0;
+    const padR = Number.parseFloat(cs.paddingRight) || 0;
+    const padT = Number.parseFloat(cs.paddingTop) || 0;
+    const padB = Number.parseFloat(cs.paddingBottom) || 0;
+    const bL = Number.parseFloat(cs.borderLeftWidth) || 0;
+    const bR = Number.parseFloat(cs.borderRightWidth) || 0;
+    const bT = Number.parseFloat(cs.borderTopWidth) || 0;
+    const bB = Number.parseFloat(cs.borderBottomWidth) || 0;
+
     const lx = (x - rect.left) / (scaleX || 1);
     const ly = (y - rect.top) / (scaleY || 1);
 
-    const gx = clamp(lx - pad, 0, boardEl.offsetWidth - pad * 2 - 1);
-    const gy = clamp(ly - pad, 0, boardEl.offsetHeight - pad * 2 - 1);
+    const contentW = Math.max(1, boardEl.clientWidth - padL - padR);
+    const contentH = Math.max(1, boardEl.clientHeight - padT - padB);
 
-    const cellW = (boardEl.offsetWidth - pad * 2) / N;
-    const cellH = (boardEl.offsetHeight - pad * 2) / N;
+    const gx = clamp(lx - bL - padL, 0, contentW - 1);
+    const gy = clamp(ly - bT - padT, 0, contentH - 1);
+
+    const cellW = contentW / N;
+    const cellH = contentH / N;
 
     const cx = clamp(Math.floor(gx / cellW), 0, N - 1);
     const cy = clamp(Math.floor(gy / cellH), 0, N - 1);
