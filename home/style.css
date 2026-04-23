@@ -1,0 +1,172 @@
+.homeTop{
+  padding:70px 16px 40px;
+  position:relative;
+  z-index:2;
+}
+
+.profile{
+  padding:12px 18px;
+  border-radius:22px;
+  width:fit-content;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap: 8px;
+}
+
+.profile__icon{
+  width:40px;
+  height:40px; 
+}
+
+.profile__icon img{
+  width:40px;
+  height:40px;
+  object-fit:contain;
+}
+
+.profile__name{
+  font-weight:600;
+  font-size:24px;
+  line-height:18px;
+  margin-bottom: 8px;
+}
+
+.profile_coins {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.profile__sub{
+  font-size:16px;
+  color:rgba(255,255,255,.72);
+}
+
+.home{
+  padding:6px 16px 20px;
+  display:flex;
+  flex-direction:column;
+  gap:58px;
+}
+
+.card{
+  text-decoration:none;
+  color:inherit;
+  border-radius:22px;
+  padding:16px;
+  position:relative;
+  isolation:isolate;
+  z-index:0;
+  overflow:hidden;
+  clip-path: inset(-80px 0 0 0 round 22px);
+  height:194px;
+  display: flex;
+  align-items: center;
+}
+
+.card:active{transform:translateY(1px)}
+
+.card--wide{
+  height:194px;
+  overflow:hidden;
+  clip-path: inset(-60px 0 0 0 round 22px);
+}
+
+.card--wide .card__title{
+  font-size:16px;
+  font-weight:600;
+}
+
+.card--wide .card__sub{
+  margin-top:4px;
+  font-size:48px;
+  font-weight:600;
+  color:#fff;
+}
+
+.card__small{font-size:13px; font-weight:800; opacity:.85}
+.card__big{font-size:34px; font-weight:1000; letter-spacing:.3px; margin-top:2px}
+
+.card__title{font-size:58px; font-weight:1000; line-height:1}
+.card__sub{font-size:24px; font-weight:300; color:rgba(255,255,255,.78)}
+
+.card__text{
+  position:relative;
+  z-index:3;
+}
+
+.card__text--right {
+  margin-left: auto; 
+}
+
+.card__coins{
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin-top: 6px;
+}
+
+.card__text--right .card__coins{
+  justify-content: flex-end;
+}
+
+.card__art{
+  position:absolute;
+  right:10px;
+  bottom:-6px;
+  height:180px;
+  width:auto;
+  object-fit:contain;
+  z-index:1;
+  filter: drop-shadow(0 18px 30px rgba(0,0,0,.35));
+}
+
+.card__art--ach{
+  left:-6px;
+  right:auto;
+  bottom:-22px;
+  top:auto;
+  height:180px;
+  object-fit:contain;
+  z-index:0;
+}
+
+.card--break .card__art{
+  left:6px;
+  right:auto;
+  height:190px;
+}
+
+.card--jumper{min-height:120px}
+.card--break{min-height:120px}
+.card--blast{min-height:110px; background: rgba(255, 255, 255, 0.1); border-color: rgba(255,255,255,.14)}
+
+.card--blast .card__art{
+  right:-10px;
+  bottom:-34px;
+  height:210px;
+}
+
+.card__tetris{
+  position:absolute;
+  right:18px;
+  bottom:16px;
+  width:88px;
+  height:66px;
+  border-radius:16px;
+  background:
+    linear-gradient(135deg, rgba(255,0,0,.85), rgba(255,0,0,0)),
+    linear-gradient(135deg, rgba(0,140,255,.85), rgba(0,140,255,0));
+  opacity:.65;
+  transform: rotate(-10deg);
+}
+
+.card--wordle{min-height:96px}
+
+.card--wordle .card__art{
+  left:-24px;
+  right:auto;
+  bottom:-34px;
+  height:200px;
+}

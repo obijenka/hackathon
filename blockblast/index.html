@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>МТБласт</title>
+    <link rel="stylesheet" href="../styles.css" />
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <div class="app" id="app">
+      <header class="topbar">
+        <a class="btn btn--pill topbar__menu" href="../home/index.html">В меню</a>
+        <h1 class="title">МТБласт</h1>
+        <div class="topbar__spacer" aria-hidden="true"></div>
+      </header>
+
+      <main class="stage" aria-label="Игра Блокбласт">
+        <section class="bb">
+          <div class="bb__score" aria-label="Счёт">
+            <span id="score">0</span>
+          </div>
+
+          <div class="bb__coinsLine" id="coinsLine" aria-label="МТкоины">
+            <span class="bb__coinsText">+0</span>
+            <img class="bb__coin" src="../images/coin.png" alt="" />
+          </div>
+
+          <div class="bb__boardWrap">
+            <div class="bb__board" id="board" aria-label="Поле"></div>
+          </div>
+
+          <div class="bb__tray" id="tray" aria-label="Фигуры"></div>
+        </section>
+      </main>
+
+      <nav class="bottombar" aria-label="Навигация">
+        <a class="tab" href="../home/index.html">
+          <span class="tab__icon"><img src="../images/menu/main.png" alt="" /></span>
+          <span class="tab__text">Главная</span>
+        </a>
+        <button class="tab" type="button">
+          <span class="tab__icon"><img src="../images/menu/products.png" alt="" /></span>
+          <span class="tab__text">Продукты</span>
+        </button>
+        <button class="tab tab--active" type="button">
+          <span class="tab__icon"><img src="../images/menu/games.png" alt="" /></span>
+          <span class="tab__text">Игры</span>
+        </button>
+        <button class="tab" type="button">
+          <span class="tab__icon"><img src="../images/menu/more.png" alt="" /></span>
+          <span class="tab__text">Ещё</span>
+        </button>
+      </nav>
+    </div>
+
+    <div class="bb__dragLayer" id="dragLayer" aria-hidden="true"></div>
+    
+    <script src="./script.js" defer></script>
+  </body>
+</html>

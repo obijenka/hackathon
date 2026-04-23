@@ -1,0 +1,218 @@
+.stage{padding:0}
+
+.w{
+  min-height:100%;
+  padding:0 16px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:14px;
+}
+
+.w.is-kbd-open{
+  padding-bottom:340px;
+}
+
+.w__hud{
+  width:100%;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:6px;
+}
+
+.w__score{
+  font-weight:1000;
+  font-size:52px;
+  letter-spacing:.4px;
+  line-height:1;
+}
+
+.w__coinsLine{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:6px;
+  font-size:14px;
+  color:rgba(255,255,255,.88);
+}
+
+.w__coinsText{
+  font-size:32px;
+  font-weight:300;
+}
+
+.w__coin{
+  width:18px;
+  height:18px;
+  display:block;
+  object-fit:contain;
+}
+
+.w__maxBadge{
+  display:none;
+  margin-left:8px;
+  padding:6px 10px;
+  border-radius:999px;
+  font-size:12px;
+  font-weight:900;
+  letter-spacing:.6px;
+  color:rgba(255,255,255,.92);
+  border:1px solid rgba(255,255,255,.18);
+  background: rgba(255, 255, 255, 0.10);
+  background-image: linear-gradient(135deg, rgba(255,255,255,.18), rgba(255,255,255,.06));
+}
+
+.w__maxBadge.is-visible{display:inline-flex}
+
+.w__grid{
+  width:min(520px, 92vw);
+  margin-top:2px;
+  display:grid;
+  grid-template-columns: repeat(var(--cols, 6), 1fr);
+  grid-template-rows: repeat(var(--rows, 5), 1fr);
+  gap:0;
+  row-gap: 44px;
+}
+
+.w__row{
+  grid-column: 1 / -1;
+  display:grid;
+  grid-template-columns: repeat(var(--cols, 6), 1fr);
+  gap:0;
+  position:relative;
+}
+
+.w__row.is-locked::after{
+  content:"";
+  position:absolute;
+  left:0;
+  right:0;
+  top:50%;
+  transform:translateY(-50%);
+  height:10px;
+  background:rgba(255,255,255,.14);
+  border-radius:999px;
+  filter: blur(.2px);
+  pointer-events:none;
+}
+
+.w__cell{
+  aspect-ratio: 1 / 1;
+  background: rgba(83, 83, 83, 0.48); 
+  border: 1px solid rgba(216, 216, 216, 0.04);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-weight:600;
+  font-size:64px;
+  letter-spacing:.5px;
+  text-transform:uppercase;
+  user-select:none;
+}
+
+.w__cell.is-green{ background: rgba(72, 208, 38, 0.48); }
+.w__cell.is-yellow{ background: rgba(249, 206, 11, 0.48); }
+.w__cell.is-gray{ background: rgba(83, 83, 83, 0.48); }
+
+.w__status{
+  min-height:20px;
+  color:rgba(255,255,255,.82);
+  font-weight:800;
+}
+
+.w__kbd{
+  width:min(520px, 92vw);
+  display:grid;
+  gap:8px;
+  margin-top:auto;
+  padding-bottom: 92px;
+}
+
+.w__kbdToggle{display:none}
+.w__kbdBackdrop{display:none}
+
+@media (max-width: 576px){
+  .w__kbd{
+    position:fixed;
+    left:0;
+    right:0;
+    bottom: calc(var(--nav-h) + env(safe-area-inset-bottom));
+    width:100%;
+    max-width:576px;
+    margin:0 auto;
+    padding:14px 16px 16px;
+    background: rgba(13, 14, 16, 0.88);
+    border-top: 1px solid rgba(255,255,255,.14);
+    backdrop-filter: blur(16px);
+    transform: translateY(110%);
+    visibility:hidden;
+    pointer-events:none;
+    transition: transform 180ms ease;
+    z-index:12;
+  }
+
+  .w__kbd.is-open{
+    transform: translateY(0);
+    visibility:visible;
+    pointer-events:auto;
+  }
+
+  .w__kbdBackdrop{
+    position:fixed;
+    inset:0;
+    background: rgba(0,0,0,.45);
+    z-index:11;
+    opacity:0;
+    pointer-events:none;
+    transition: opacity 180ms ease;
+  }
+
+  .w__kbdBackdrop.is-open{
+    opacity:1;
+    pointer-events:auto;
+  }
+
+  .w__kbdToggle{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    position:fixed;
+    right:14px;
+    bottom: calc(var(--nav-h) + env(safe-area-inset-bottom) + 14px);
+    width:56px;
+    height:56px;
+    border-radius:999px;
+    border:1px solid rgba(255,255,255,.18);
+    background: rgba(255, 255, 255, 0.10);
+    background-image: linear-gradient(135deg, rgba(255,255,255,.18), rgba(255,255,255,.06));
+    color:#ffffff;
+    font-size:22px;
+    z-index:13;
+  }
+}
+
+.krow{
+  display:grid;
+  grid-template-columns: repeat(var(--n), 1fr);
+  gap:8px;
+}
+
+.key{
+  border:0;
+  background:transparent;
+  color:rgba(255,255,255,.92);
+  border-radius:10px;
+  padding:10px 0;
+  font-weight:600;
+  cursor:pointer;
+  user-select:none;
+  -webkit-tap-highlight-color: transparent;
+  font-size: 40px;
+}
+
+.key.is-green{color:#48D026}
+.key.is-yellow{color:#F9CE0B}
+.key.is-gray{color:rgba(255,255,255,.35)}
+

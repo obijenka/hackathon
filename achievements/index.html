@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>Магазин</title>
+    <link rel="stylesheet" href="../styles.css" />
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <div class="app" id="app">
+      <header class="topbar">
+        <a class="btn btn--pill topbar__menu" href="../home/index.html">В меню</a>
+        <h1 class="title">Магазин</h1>
+        <div class="topbar__spacer" aria-hidden="true"></div>
+      </header>
+
+      <main class="stage" aria-label="Достижения">
+        <section class="ach" aria-label="Список достижений">
+          <div class="ach__section" id="tempSection">
+            <h2 class="ach__h">Временные</h2>
+            <div class="ach__list" id="tempList"></div>
+          </div>
+
+          <div class="ach__section" id="permSection">
+            <h2 class="ach__h">Постоянные</h2>
+            <div class="ach__list" id="permList"></div>
+          </div>
+        </section>
+      </main>
+
+      <nav class="bottombar" aria-label="Навигация">
+        <a class="tab" href="../home/index.html">
+          <span class="tab__icon"><img src="../images/menu/main.png" alt="" /></span>
+          <span class="tab__text">Главная</span>
+        </a>
+        <button class="tab" type="button">
+          <span class="tab__icon"><img src="../images/menu/products.png" alt="" /></span>
+          <span class="tab__text">Продукты</span>
+        </button>
+        <button class="tab" type="button">
+          <span class="tab__icon"><img src="../images/menu/games.png" alt="" /></span>
+          <span class="tab__text">Игры</span>
+        </button>
+        <button class="tab tab--active" type="button">
+          <span class="tab__icon"><img src="../images/menu/more.png" alt="" /></span>
+          <span class="tab__text">Ещё</span>
+        </button>
+      </nav>
+    </div>
+
+    <script src="./script.js" defer></script>
+  </body>
+</html>

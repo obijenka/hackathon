@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>Свинка-копилка</title>
+    <link rel="stylesheet" href="../styles.css" />
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <div class="app" id="app">
+      <header class="topbar">
+        <a class="btn btn--pill topbar__menu" href="../home/index.html">В меню</a>
+        <h1 class="title">Разбей!</h1>
+        <div class="topbar__spacer" aria-hidden="true"></div>
+      </header>
+
+      <main class="stage" aria-label="Игра Свинка-копилка">
+        <section class="pig">
+          <div class="pig__hud" aria-label="Счёт">
+            <div class="pig__clicks" id="clicks">0</div>
+            <div class="pig__coinsLine" id="coinsLine">
+              <span class="pig__coinsText">+0</span>
+              <img class="pig__coin" src="../images/coin.png" alt="" />
+            </div>
+          </div>
+
+          <button class="pig__btn" id="pigBtn" type="button" aria-label="Клик по свинке">
+            <div class="pig__scene" id="pigScene">
+              <img class="pig__img" id="pigImg" src="../images/pig.png" alt="Свинка-копилка" draggable="false" />
+              <div class="pig__shadow" aria-hidden="true"></div>
+            </div>
+          </button>
+
+          <div class="pig__actions">
+            <button class="btn pig__actionBtn" id="btnX2" type="button">x2</button>
+            <button class="btn pig__actionBtn" id="btnAuto" type="button">авто</button>
+          </div>
+
+          <div class="pig__particles" id="particles" aria-hidden="true"></div>
+        </section>
+      </main>
+
+      <nav class="bottombar" aria-label="Навигация">
+        <a class="tab" href="../home/index.html">
+          <span class="tab__icon"><img src="../images/menu/main.png" alt="" /></span>
+          <span class="tab__text">Главная</span>
+        </a>
+        <button class="tab" type="button">
+          <span class="tab__icon"><img src="../images/menu/products.png" alt="" /></span>
+          <span class="tab__text">Продукты</span>
+        </button>
+        <button class="tab tab--active" type="button">
+          <span class="tab__icon"><img src="../images/menu/games.png" alt="" /></span>
+          <span class="tab__text">Игры</span>
+        </button>
+        <button class="tab" type="button">
+          <span class="tab__icon"><img src="../images/menu/more.png" alt="" /></span>
+          <span class="tab__text">Ещё</span>
+        </button>
+      </nav>
+    </div>
+
+    <script src="./script.js" defer></script>
+  </body>
+</html>

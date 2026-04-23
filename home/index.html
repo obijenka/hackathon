@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>Главная</title>
+    <link rel="stylesheet" href="../styles.css" />
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <div class="app" id="app">
+      <header class="homeTop">
+        <div class="profile glass">
+          <div class="profile__icon" aria-hidden="true">
+            <img src="../images/user.png" alt="" />
+          </div>
+          <div class="profile__meta">
+            <div class="profile__name">Гость</div>
+            <div class="profile_coins">
+              <div class="profile__sub" id="profileCoins">1000</div>
+              <img src="../images/coin.png" alt="">
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <main class="stage" aria-label="Главное меню">
+        <section class="home">
+          <a class="card glass card--wide" href="../achievements/index.html" aria-label="Достижения">
+            <div class="card__text card__text--right">
+              <div class="card__title">Магазин</div>
+              <div class="card__sub">23/100</div>
+            </div>
+            <img class="card__art card__art--ach" src="../images/achievements.png" alt="" />
+          </a>
+
+          <a class="card glass card--jumper" href="../jumper/index.html" aria-label="Игра Прыгун">
+            <div class="card__text">
+              <div class="card__title">Прыгун</div>
+              <div class="card__coins">
+                <div class="card__sub" id="jumperProgress">0/250</div>
+                <img src="../images/coin.png" alt="Монета">
+              </div>
+              
+            </div>
+            <img class="card__art" src="../images/jumper.png" alt="" />
+          </a>
+
+          <a class="card glass card--break" href="../pig/index.html" aria-label="Игра Разбей">
+            <img class="card__art" src="../images/break.png" alt="" />
+            <div class="card__text card__text--right">
+              <div class="card__title">Разбей!</div>
+  
+              <div class="card__coins">
+                 <div class="card__sub" id="pigProgress">0/250</div>
+                <img src="../images/coin.png" alt="Монета">
+              </div>
+            </div>
+          </a>
+
+          <a class="card glass card--blast" href="../blockblast/index.html" aria-label="Игра МТБласт">
+            <div class="card__text">
+              <div class="card__title">МТБласт</div>
+              
+              <div class="card__coins">
+                 <div class="card__sub" id="blockblastProgress">0/250</div>
+                <img src="../images/coin.png" alt="Монета">
+              </div>
+            </div>
+            <img class="card__art" src="../images/blockblast.png" alt="" />
+          </a>
+
+          <a class="card glass card--wordle" href="../wordle/index.html" aria-label="Игра Вордли">
+            <img class="card__art" src="../images/words.png" alt="" />
+            <div class="card__text card__text--right">
+              <div class="card__title">Вордли</div>
+              
+
+              <div class="card__coins">
+                 <div class="card__sub" id="wordleProgress">0/250</div>
+                <img src="../images/coin.png" alt="Монета">
+              </div>
+            </div>
+          </a>
+        </section>
+      </main>
+
+      <nav class="bottombar" aria-label="Навигация">
+        <a class="tab tab--active" href="../home/index.html">
+          <span class="tab__icon"><img src="../images/menu/main.png" alt="" /></span>
+          <span class="tab__text">Главная</span>
+        </a>
+        <button class="tab" type="button">
+          <span class="tab__icon"><img src="../images/menu/products.png" alt="" /></span>
+          <span class="tab__text">Продукты</span>
+        </button>
+        <button class="tab" type="button">
+          <span class="tab__icon"><img src="../images/menu/games.png" alt="" /></span>
+          <span class="tab__text">Игры</span>
+        </button>
+        <button class="tab" type="button">
+          <span class="tab__icon"><img src="../images/menu/more.png" alt="" /></span>
+          <span class="tab__text">Ещё</span>
+        </button>
+      </nav>
+    </div>
+
+    <script src="./script.js" defer></script>
+  </body>
+</html>

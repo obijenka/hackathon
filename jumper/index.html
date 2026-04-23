@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>Прыгун</title>
+    <link rel="stylesheet" href="../styles.css" />
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body class="has-canvas">
+    <canvas id="game" class="game" width="390" height="844"></canvas>
+    <div class="app" id="app">
+      <header class="topbar">
+        <a class="btn btn--pill topbar__menu" id="menuBtn" href="../home/index.html">Меню</a>
+        <h1 class="title">Прыгун</h1>
+        <div class="topbar__spacer" aria-hidden="true"></div>
+      </header>
+
+      <main class="stage" aria-label="Игра Прыгун">
+        <div class="jHud" aria-label="Счёт">
+          <div class="scoreBadge" aria-label="Очки">
+            <span id="score">0</span>
+          </div>
+          <div class="j__coinsLine" id="coinsLine" aria-label="МТкоины">
+            <span class="j__coinsText">+0</span>
+            <img class="j__coin" src="../images/coin.png" alt="" />
+          </div>
+        </div>
+        <div class="hint" id="hint">
+          Управление: <b>← →</b> или <b>свайп</b>
+        </div>
+      </main>
+
+      <nav class="bottombar" aria-label="Навигация">
+        <a class="tab" href="../home/index.html">
+          <span class="tab__icon"><img src="../images/menu/main.png" alt="" /></span>
+          <span class="tab__text">Главная</span>
+        </a>
+        <button class="tab" type="button">
+          <span class="tab__icon"><img src="../images/menu/products.png" alt="" /></span>
+          <span class="tab__text">Продукты</span>
+        </button>
+        <button class="tab tab--active" type="button">
+          <span class="tab__icon"><img src="../images/menu/games.png" alt="" /></span>
+          <span class="tab__text">Игры</span>
+        </button>
+        <a class="tab" href="../achievements/index.html">
+          <span class="tab__icon"><img src="../images/menu/more.png" alt="" /></span>
+          <span class="tab__text">Ещё</span>
+        </a>
+      </nav>
+    </div>
+
+    <script src="./script.js" defer></script>
+  </body>
+</html>
