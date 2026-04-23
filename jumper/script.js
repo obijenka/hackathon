@@ -33,8 +33,8 @@
     w: 390,
     h: 844,
     gravity: 1900,
-    moveAccel: 2400,
-    maxVx: 520,
+    moveAccel: 3200,
+    maxVx: 640,
     jumpV: 920,
     cameraY: 0,
     bestY: 0,
@@ -397,7 +397,7 @@
     let pointerTarget = 0;
     if (pointerActive) {
       const dx = pointerX - pointerStartX;
-      const norm = clamp(dx / (world.w * 0.22), -1, 1);
+      const norm = clamp(dx / (world.w * 0.14), -1, 1);
       pointerTarget = norm;
     }
 
@@ -603,6 +603,7 @@
     };
 
     const onPointerUp = (e) => {
+      if (!pointerActive) return;
       e?.preventDefault?.();
       pointerActive = false;
     };
@@ -631,6 +632,7 @@
     };
 
     const onTouchEnd = (e) => {
+      if (!pointerActive) return;
       e?.preventDefault?.();
       pointerActive = false;
     };
