@@ -205,5 +205,5 @@ body.has-bb .topbar{
   .bb{padding:0 14px}
   .bb__score{font-size:44px}
   .bb__tray{padding-bottom: 88px}
-  :root{--bb-block:30px}
+  :root{--bb-block:20px}
 }
