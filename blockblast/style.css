@@ -1,11 +1,52 @@
 .stage{padding:0; overflow:auto; overscroll-behavior: none}
 
 body.has-bb{
+  zoom:1;
+}
 
+body.has-bb .app{min-height:100dvh}
+
+body.has-bb .stage{
+  overflow:hidden;
+}
+
+body.has-bb .topbar{
+  padding:44px 16px 18px;
 }
 
 :root{
   --bb-block: 32px;
+}
+
+@media (max-width: 576px){
+  :root{--bb-block:30px}
+  .bb__board{width:min(360px, 94vw, calc(100dvh - 360px))}
+  .bb__score{font-size:44px}
+}
+
+@media (max-height: 720px){
+  body.has-bb .topbar{padding:34px 16px 12px}
+  .bb{gap:10px}
+  .pieceSlot{min-height:96px}
+  .bb__board{width:min(340px, 94vw, calc(100dvh - 340px))}
+}
+
+@media (max-width: 380px), (max-height: 640px){
+  :root{--bb-block:28px}
+  body.has-bb .topbar{padding:28px 14px 10px}
+  .bb{gap:8px; padding:0 14px}
+  .bb__tray{gap:10px}
+  .pieceSlot{min-height:78px}
+  .bb__board{width:min(320px, 96vw, calc(100dvh - 320px))}
+}
+
+@media (max-height: 600px){
+  :root{--bb-block:26px}
+  body.has-bb .topbar{padding:22px 14px 8px}
+  .bb{gap:6px}
+  .bb__tray{gap:8px}
+  .pieceSlot{min-height:72px}
+  .bb__board{width:min(300px, 96vw, calc(100dvh - 290px))}
 }
 
 .bb{
@@ -54,7 +95,7 @@ body.has-bb{
 }
 
 .bb__board{
-  width:min(410px, 92vw);
+  width:min(390px, 92vw, calc(100dvh - 380px));
   aspect-ratio: 1 / 1;
   border-radius:18px;
   background:rgba(0,0,0,.22);
@@ -110,7 +151,7 @@ body.has-bb{
   gap:14px;
   align-items:end;
   margin-top:auto;
-  padding-bottom: 92px;
+  padding-bottom: 0;
 }
 
 .pieceSlot{
